@@ -24,7 +24,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { submitBirthRecord } from '../actions';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Separator } from '@/components/ui/separator';
 
 export default function BirthForm() {
@@ -60,19 +60,23 @@ export default function BirthForm() {
   const { toast } = useToast();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [registrationPlaceholder, setRegistrationPlaceholder] = useState("DYYYY############");
 
   const registrationDate = useWatch({ control: form.control, name: 'dor' });
 
-  const registrationPlaceholder = (() => {
-    try {
-      const year = registrationDate && registrationDate.length >= 4 ? registrationDate.slice(0, 4) : String(new Date().getFullYear());
-      let suffix = "";
-      for (let i = 0; i < 12; i++) suffix += Math.floor(Math.random() * 10);
-      return `D${year}${suffix}`;
-    } catch {
-      return "DYYYY############";
-    }
-  })();
+  useEffect(() => {
+    const generatePlaceholder = () => {
+      try {
+        const year = registrationDate && registrationDate.length >= 4 ? registrationDate.slice(0, 4) : String(new Date().getFullYear());
+        let suffix = "";
+        for (let i = 0; i < 12; i++) suffix += Math.floor(Math.random() * 10);
+        return `D${year}${suffix}`;
+      } catch {
+        return "DYYYY############";
+      }
+    };
+    setRegistrationPlaceholder(generatePlaceholder());
+  }, [registrationDate]);
   
   const onSubmit = async (data: BirthFormValues) => {
     setIsSubmitting(true);

@@ -3,7 +3,7 @@ import BirthForm from "./components/birth-form";
 
 export default function BirthPage() {
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="max-w-5xl mx-auto py-8">
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl font-headline">Birth Certificate Application</CardTitle>

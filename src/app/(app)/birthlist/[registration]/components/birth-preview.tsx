@@ -97,7 +97,7 @@ export default function BirthPreview({ data }: BirthPreviewProps) {
             <p className="mt-3">UPDATED ON</p>
             <p>{u(data.dor)} {u(data.dom)}</p>
             <Canvas
-              text={"https://edistrict.up.nic.in"}
+              text={u(data.registration)}
               options={{
                 quality: 0.3,
                 level: "M",
@@ -131,7 +131,9 @@ export default function BirthPreview({ data }: BirthPreviewProps) {
           
             <p className="mt-5">जारी करने वाला पदाधिकारी / ISSUING AUTHORITY :</p>
             <br/>
-            <div className="text-center font-bold">
+            <br/>
+            <br/>
+            <div className="text-center font-bold mt-2">
               <p>रजिस्ट्रार (जन्म एवं मृत्यु)</p>
               <p>REGISTRAR (BIRTH & DEATH)</p>
               <p className="mt-1">{u(data.registrarh)} </p>

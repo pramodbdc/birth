@@ -5,6 +5,7 @@ import BirthPreview from './components/birth-preview';
 import { notFound } from 'next/navigation';
 import { maskAadhaarNumber } from '@/ai/flows/mask-aadhaar-number';
 import { formatDateToWords } from '@/ai/flows/date-formatting-tool';
+import { dateToWords } from '@/lib/utils';
 
 type Props = {
   params: { registration: string };
@@ -18,13 +19,15 @@ async function getBirthRecord(registration: string) {
 
   const data = recordDocs.docs[0].data();
   
-  // Use AI flows on server
-  const [maskedChildAadhaar, maskedFatherAadhaar, maskedMotherAadhaar, dobInWords] = await Promise.all([
+  // Use AI flows on server and util function
+  const [maskedChildAadhaar, maskedFatherAadhaar, maskedMotherAadhaar] = await Promise.all([
     maskAadhaarNumber({ aadhaarNumber: data.aadhaar || '' }),
     maskAadhaarNumber({ aadhaarNumber: data.faadhaar || '' }),
     maskAadhaarNumber({ aadhaarNumber: data.maadhaar || '' }),
-    formatDateToWords(data.dob || ''),
   ]);
+
+  const dobInWords = dateToWords(data.dob);
+
 
   return {
     ...data,

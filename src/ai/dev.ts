@@ -1,1 +1,5 @@
-// Flows will be imported for their side effects in this file.
+import { config } from 'dotenv';
+config();
+
+import '@/ai/flows/date-formatting-tool.ts';
+import '@/ai/flows/mask-aadhaar-number.ts';

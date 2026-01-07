@@ -1,3 +1,22 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "emblem-of-india",
+      "description": "Emblem of India",
+      "imageUrl": "https://images.unsplash.com/photo-1675855547764-2b29a996824f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxlbWJsZW0lMjBpbmRpYXxlbnwwfHx8fDE3Njc3NjQ4ODV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "emblem india"
+    },
+    {
+      "id": "state-logo",
+      "description": "State government logo",
+      "imageUrl": "https://images.unsplash.com/photo-1676970133020-c3e8a2a0cae4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxnb3Zlcm5tZW50JTIwbG9nb3xlbnwwfHx8fDE3Njc3NjQ4ODV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "government logo"
+    },
+    {
+      "id": "health-dept-logo",
+      "description": "Health department logo",
+      "imageUrl": "https://images.unsplash.com/photo-1760037028553-3c5c801f18c1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxoZWFsdGglMjBsb2dvfGVufDB8fHx8MTc2NzY3NjUyNHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "health logo"
+    }
+  ]
 }

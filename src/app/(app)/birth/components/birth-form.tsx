@@ -59,7 +59,7 @@ export default function BirthForm() {
   const { toast } = useToast();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [registrationPlaceholder, setRegistrationPlaceholder] = useState("DYYYY############");
+  const [registrationPlaceholder, setRegistrationPlaceholder] = useState("B" + new Date().getFullYear());
 
   const registrationDate = useWatch({ control: form.control, name: 'dor' });
 
@@ -67,8 +67,8 @@ export default function BirthForm() {
     const generatePlaceholder = () => {
       const year = registrationDate && registrationDate.length >= 4 ? registrationDate.slice(0, 4) : String(new Date().getFullYear());
       let suffix = "";
-      for (let i = 0; i < 12; i++) suffix += Math.floor(Math.random() * 10);
-      return `D${year}${suffix}`;
+      for (let i = 0; i < 14; i++) suffix += Math.floor(Math.random() * 10);
+      return `B${year}${suffix}`;
     };
     
     // Generate placeholder only on the client side
@@ -136,7 +136,7 @@ export default function BirthForm() {
           </SelectContent>
         </Select>
       ),
-      aadhaar: <Input placeholder="EID/Aadhaar No" {...form.register("aadhaar")} />,
+      aadhaar: <Input placeholder="EID/Aadhaar No (Optional)" {...form.register("aadhaar")} />,
       hfname: <Input placeholder="Father's name (English)" {...form.register("hfname")} />,
       faadhaar: <Input placeholder="Father's Aadhaar No (Optional)" {...form.register("faadhaar")} />,
       mname: <Input placeholder="Mother's Name (English)" {...form.register("mname")} />,
@@ -157,7 +157,7 @@ export default function BirthForm() {
     };
 
     const labelMap: Record<string, string> = {
-        name: "Full Name", dob: "Date of Birth", gender: "Gender", pbirth: "Place of Birth", saadhaar: "ID Type", aadhaar: "Aadhaar/EID No", hfname: "Father's Name (English)", faadhaar: "Father's Aadhaar No", mname: "Mother's Name (English)", maadhaar: "Mother's Aadhaar No", padress: "Permanent Address (English)", bhadress: "Address at time of birth", dor: "Date of Registration", dom: "Time of Registration", registration: "Registration No (Optional)", registrar: "Registrar Name (English)", registrarh: "Registrar Name (Hindi)", district: "Registrar District (English)", sbd: "Registrar Tehsil/Block (English)", districth: "Registrar District (Hindi)", sbdh: "Registrar Tehsil/Block (Hindi)", state: "State (English)", stateh: "State (Hindi)"
+        name: "Full Name", dob: "Date of Birth", gender: "Gender", pbirth: "Place of Birth", saadhaar: "ID Type", aadhaar: "Aadhaar/EID No (Optional)", hfname: "Father's Name (English)", faadhaar: "Father's Aadhaar No (Optional)", mname: "Mother's Name (English)", maadhaar: "Mother's Aadhaar No (Optional)", padress: "Permanent Address (English)", bhadress: "Address at time of birth", dor: "Date of Registration", dom: "Time of Registration", registration: "Registration No (Optional)", registrar: "Registrar Name (English)", registrarh: "Registrar Name (Hindi)", district: "Registrar District (English)", sbd: "Registrar Tehsil/Block (English)", districth: "Registrar District (Hindi)", sbdh: "Registrar Tehsil/Block (Hindi)", state: "State (English)", stateh: "State (Hindi)"
     };
     
     return (

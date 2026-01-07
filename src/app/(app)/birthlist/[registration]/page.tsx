@@ -1,46 +1,64 @@
-'use server';
-import { db } from '@/lib/firebase';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+'use client';
 import BirthPreview from './components/birth-preview';
-import { notFound } from 'next/navigation';
+import { notFound, useParams } from 'next/navigation';
 import { maskAadhaarNumber } from '@/ai/flows/mask-aadhaar-number';
-import { formatDateToWords } from '@/ai/flows/date-formatting-tool';
 import { dateToWords } from '@/lib/utils';
+import { useEffect, useState } from 'react';
 
-type Props = {
-  params: { registration: string };
+type BirthData = {
+  maskedAadhaar?: string;
+  maskedFaadhaar?: string;
+  maskedMaadhaar?: string;
+  dobInWords?: string;
+  [key: string]: any;
 };
 
-async function getBirthRecord(registration: string) {
-  const recordQuery = query(collection(db, `births`), where("registration", "==", registration));
-  const recordDocs = await getDocs(recordQuery);
-
-  if (recordDocs.empty) return null;
-
-  const data = recordDocs.docs[0].data();
-  
-  // Use AI flows on server and util function
-  const [maskedChildAadhaar, maskedFatherAadhaar, maskedMotherAadhaar] = await Promise.all([
-    maskAadhaarNumber({ aadhaarNumber: data.aadhaar || '' }),
-    maskAadhaarNumber({ aadhaarNumber: data.faadhaar || '' }),
-    maskAadhaarNumber({ aadhaarNumber: data.maadhaar || '' }),
-  ]);
-
-  const dobInWords = dateToWords(data.dob);
-
-
-  return {
-    ...data,
-    maskedAadhaar: maskedChildAadhaar.maskedAadhaarNumber,
-    maskedFaadhaar: maskedFatherAadhaar.maskedAadhaarNumber,
-    maskedMaadhaar: maskedMotherAadhaar.maskedAadhaarNumber,
-    dobInWords,
-  };
-}
-
-export default async function BirthPrintPage({ params }: Props) {
+export default function BirthPrintPage() {
+  const params = useParams();
   const { registration } = params;
-  const data = await getBirthRecord(registration);
+  const [data, setData] = useState<BirthData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function getBirthRecord(registration: string) {
+      const records = JSON.parse(localStorage.getItem('birthRecords') || '[]');
+      const record = records.find((r: any) => r.registration === registration);
+
+      if (!record) {
+        setLoading(false);
+        return null;
+      }
+
+      // Use AI flows on server and util function
+      const [maskedChildAadhaar, maskedFatherAadhaar, maskedMotherAadhaar] = await Promise.all([
+        maskAadhaarNumber({ aadhaarNumber: record.aadhaar || '' }),
+        maskAadhaarNumber({ aadhaarNumber: record.faadhaar || '' }),
+        maskAadhaarNumber({ aadhaarNumber: record.maadhaar || '' }),
+      ]);
+
+      const dobInWords = dateToWords(record.dob);
+
+      setData({
+        ...record,
+        maskedAadhaar: maskedChildAadhaar.maskedAadhaarNumber,
+        maskedFaadhaar: maskedFatherAadhaar.maskedAadhaarNumber,
+        maskedMaadhaar: maskedMotherAadhaar.maskedAadhaarNumber,
+        dobInWords,
+      });
+      setLoading(false);
+    }
+    
+    if (registration && typeof registration === 'string') {
+      getBirthRecord(registration);
+    } else {
+      setLoading(false);
+    }
+
+  }, [registration]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   if (!data) {
     notFound();
@@ -48,5 +66,3 @@ export default async function BirthPrintPage({ params }: Props) {
 
   return <BirthPreview data={data} />;
 }
-
-export const dynamic = 'force-dynamic';

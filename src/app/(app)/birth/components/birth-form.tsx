@@ -23,7 +23,6 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
-import { submitBirthRecord } from '../actions';
 import { useState, useEffect } from 'react';
 import { Separator } from '@/components/ui/separator';
 
@@ -75,7 +74,9 @@ export default function BirthForm() {
         return "DYYYY############";
       }
     };
-    setRegistrationPlaceholder(generatePlaceholder());
+    if (typeof window !== 'undefined') {
+        setRegistrationPlaceholder(generatePlaceholder());
+    }
   }, [registrationDate]);
   
   const onSubmit = async (data: BirthFormValues) => {
@@ -84,7 +85,11 @@ export default function BirthForm() {
       if (!data.registration) {
         data.registration = registrationPlaceholder;
       }
-      await submitBirthRecord(data);
+      
+      const records = JSON.parse(localStorage.getItem('birthRecords') || '[]');
+      records.push(data);
+      localStorage.setItem('birthRecords', JSON.stringify(records));
+
       toast({
         title: 'Success!',
         description: 'Birth record submitted successfully.',

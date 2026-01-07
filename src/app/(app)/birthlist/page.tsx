@@ -1,6 +1,4 @@
-'use server';
-import { db } from '@/lib/firebase';
-import { collection, getDocs, query } from 'firebase/firestore';
+'use client';
 import {
   Table,
   TableBody,
@@ -13,6 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Eye, FilePlus2 } from 'lucide-react';
+import { useEffect, useState } from "react";
 
 type BirthRecord = {
   id: string;
@@ -22,23 +21,15 @@ type BirthRecord = {
   dor: string;
 };
 
-async function getBirthRecords() {
-  const birthsRef = collection(db, `births`);
-  const birthsSnapshot = await getDocs(birthsRef);
-  
-  const records: BirthRecord[] = birthsSnapshot.docs.map(doc => ({
-    id: doc.id,
-    name: doc.data().name,
-    dob: doc.data().dob,
-    registration: doc.data().registration,
-    dor: doc.data().dor,
-  }));
+export default function BirthListPage() {
+  const [records, setRecords] = useState<BirthRecord[]>([]);
 
-  return records;
-}
-
-export default async function BirthListPage() {
-  const records = await getBirthRecords();
+  useEffect(() => {
+    const storedRecords = JSON.parse(localStorage.getItem('birthRecords') || '[]');
+    // Add a unique ID to each record for the key prop
+    const recordsWithId = storedRecords.map((rec: any, index: number) => ({...rec, id: rec.registration || index}));
+    setRecords(recordsWithId);
+  }, []);
 
   return (
     <Card>
@@ -95,5 +86,3 @@ export default async function BirthListPage() {
     </Card>
   );
 }
-
-export const dynamic = 'force-dynamic';

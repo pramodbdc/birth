@@ -1,28 +1,17 @@
+'use server';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import BirthPreview from './components/birth-preview';
 import { notFound } from 'next/navigation';
 import { maskAadhaarNumber } from '@/ai/flows/mask-aadhaar-number';
 import { formatDateToWords } from '@/ai/flows/date-formatting-tool';
-import { getAuth } from 'firebase/auth';
 
 type Props = {
   params: { registration: string };
 };
 
 async function getBirthRecord(registration: string) {
-  const fbAuth = getAuth();
-  const user = fbAuth.currentUser;
-  
-  if (!user) return null;
-
-  const userQuery = query(collection(db, "users"), where("uid", "==", user.uid));
-  const userDocs = await getDocs(userQuery);
-
-  if (userDocs.empty) return null;
-  const userDocId = userDocs.docs[0].id;
-  
-  const recordQuery = query(collection(db, `users/${userDocId}/births`), where("registration", "==", registration));
+  const recordQuery = query(collection(db, `births`), where("registration", "==", registration));
   const recordDocs = await getDocs(recordQuery);
 
   if (recordDocs.empty) return null;

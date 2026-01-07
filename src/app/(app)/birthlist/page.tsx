@@ -1,5 +1,6 @@
-import { auth, db } from '@/lib/firebase';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+'use server';
+import { db } from '@/lib/firebase';
+import { collection, getDocs, query } from 'firebase/firestore';
 import {
   Table,
   TableBody,
@@ -12,7 +13,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Eye, FilePlus2 } from 'lucide-react';
-import { getAuth } from "firebase/auth";
 
 type BirthRecord = {
   id: string;
@@ -23,23 +23,7 @@ type BirthRecord = {
 };
 
 async function getBirthRecords() {
-  const fbAuth = getAuth();
-  const user = fbAuth.currentUser;
-  
-  if (!user) {
-    // This should ideally not happen due to AuthGuard, but as a fallback
-    return [];
-  }
-
-  const userQuery = query(collection(db, "users"), where("uid", "==", user.uid));
-  const userDocs = await getDocs(userQuery);
-
-  if (userDocs.empty) {
-    return [];
-  }
-
-  const userDocId = userDocs.docs[0].id;
-  const birthsRef = collection(db, `users/${userDocId}/births`);
+  const birthsRef = collection(db, `births`);
   const birthsSnapshot = await getDocs(birthsRef);
   
   const records: BirthRecord[] = birthsSnapshot.docs.map(doc => ({
@@ -60,11 +44,11 @@ export default async function BirthListPage() {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <div>
-            <CardTitle>Your Birth Records</CardTitle>
+            <CardTitle>Birth Records</CardTitle>
             <CardDescription>A list of all submitted birth certificate applications.</CardDescription>
         </div>
         <Button asChild>
-            <Link href="/birth"><FilePlus2 className="mr-2 h-4 w-4" /> New Application</Link>
+            <Link href="/"><FilePlus2 className="mr-2 h-4 w-4" /> New Application</Link>
         </Button>
       </CardHeader>
       <CardContent>
@@ -103,7 +87,7 @@ export default async function BirthListPage() {
             <h3 className="text-xl font-semibold">No records found</h3>
             <p className="text-muted-foreground mt-2">You haven't submitted any birth certificate applications yet.</p>
             <Button asChild className="mt-4">
-              <Link href="/birth">Create Your First Application</Link>
+              <Link href="/">Create The First Application</Link>
             </Button>
           </div>
         )}

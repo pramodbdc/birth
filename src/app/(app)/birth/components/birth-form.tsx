@@ -24,7 +24,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { submitBirthRecord } from '../actions';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Separator } from '@/components/ui/separator';
 
 export default function BirthForm() {
@@ -83,16 +83,17 @@ export default function BirthForm() {
       await submitBirthRecord(data);
       toast({
         title: 'Success!',
-        description: 'Birth record submitted successfully. Your balance has been updated.',
+        description: 'Birth record submitted successfully.',
       });
-      router.push('/birthlist');
+      router.push(`/birthlist/${data.registration}`);
     } catch (error) {
       toast({
         variant: 'destructive',
         title: 'Submission Failed',
         description: error instanceof Error ? error.message : 'An unknown error occurred.',
       });
-      setIsSubmitting(false);
+    } finally {
+        setIsSubmitting(false);
     }
   };
   
@@ -188,7 +189,7 @@ export default function BirthForm() {
         <div className="flex justify-end">
           <Button type="submit" size="lg" disabled={isSubmitting}>
             {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Submit Application
+            Submit & Preview
           </Button>
         </div>
       </form>

@@ -134,7 +134,7 @@ export default function BirthPreview({ data }: BirthPreviewProps) {
             <div className="text-center font-bold">
               <p>रजिस्ट्रार (जन्म एवं मृत्यु)</p>
               <p>REGISTRAR (BIRTH & DEATH)</p>
-              <p>{u(data.registrarh)} </p>
+              <p className="mt-1">{u(data.registrarh)} </p>
               <p>{u(data.registrar)} </p>
             </div>
           </div>

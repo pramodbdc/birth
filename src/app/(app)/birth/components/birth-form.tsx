@@ -65,18 +65,15 @@ export default function BirthForm() {
 
   useEffect(() => {
     const generatePlaceholder = () => {
-      try {
-        const year = registrationDate && registrationDate.length >= 4 ? registrationDate.slice(0, 4) : String(new Date().getFullYear());
-        let suffix = "";
-        for (let i = 0; i < 12; i++) suffix += Math.floor(Math.random() * 10);
-        return `D${year}${suffix}`;
-      } catch {
-        return "DYYYY############";
-      }
+      const year = registrationDate && registrationDate.length >= 4 ? registrationDate.slice(0, 4) : String(new Date().getFullYear());
+      let suffix = "";
+      for (let i = 0; i < 12; i++) suffix += Math.floor(Math.random() * 10);
+      return `D${year}${suffix}`;
     };
-    if (typeof window !== 'undefined') {
-        setRegistrationPlaceholder(generatePlaceholder());
-    }
+    
+    // Generate placeholder only on the client side
+    setRegistrationPlaceholder(generatePlaceholder());
+    
   }, [registrationDate]);
   
   const onSubmit = async (data: BirthFormValues) => {

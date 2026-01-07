@@ -17,7 +17,6 @@ export default function AppLayout({
             </Link>
           </div>
           <div className="flex flex-1 items-center justify-end space-x-4">
-              <Link href="/birthlist">All Records</Link>
           </div>
         </div>
       </header>
